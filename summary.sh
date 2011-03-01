@@ -24,7 +24,7 @@ for d in "${ENDPOINT_ARR[@]}"; do
 export IFS="
 "
 	for v in "" "-a" "-nob"; do 
-		for f in `seq 1 50`; do 
+		for f in `seq 1 200`; do 
 			fn="$INPUT_DIR/$d*-f$f$v.summary"; 
 			lc=$(grep "accuracy" $fn 2>/dev/null ); 
 
