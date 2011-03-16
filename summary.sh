@@ -21,34 +21,36 @@ fi
 
 for d in "${ENDPOINT_ARR[@]}"; do 
 	OLDIFS=$IFS
-export IFS="
-"
+	export IFS="
+	"
 	for v in "" "-a" "-nob"; do 
-		for f in `seq 1 200`; do 
-			fn="$INPUT_DIR/$d*-f$f$v.summary"; 
-			lc=$(grep "accuracy" $fn 2>/dev/null ); 
+		for lstsm in "-msa" "-nls" "-nop"; do
+			for f in `seq 1 200`; do 
+				fn="$INPUT_DIR/$d*-f$f-m25$v$lstsm.summary"; 
+				lc=$(grep "accuracy" $fn 2>/dev/null ); 
 
-			if [ $? -eq 0 ]; then # file was found
-				for field in $lc; do
-					var=""
-					case "$v" in
-						"") var="aromatic_variant";;
-						"-a") var="kekule_variant";;
-						"-nob") var="reduced_variant";;
-					esac
-					l=`echo "$field" | sed "s/.*accuracy.*\ /\'$d\'	\'$var\'	$f	/g"`
-					if [ $i -eq 4 ]; then 
-						i=1
-					fi
-					echo -n "$l	"
-					case "$i" in
-						1) echo "'wt_eval'" ;;
-						2) echo "'ad_eval'" ;; 
-						3) echo "'all_eval'";;
-					esac
-					i=$(($i+1))
-				done
-			fi
+				if [ $? -eq 0 ]; then # file was found
+					for field in $lc; do
+						var=""
+						case "$v" in
+							"") var="aromatic_variant";;
+							"-a") var="kekule_variant";;
+							"-nob") var="reduced_variant";;
+						esac
+						l=`echo "$field" | sed "s/.*accuracy.*\ /\'$d\'	\'$var\'	\'$lstsm\'	$f	/g"`
+						if [ $i -eq 4 ]; then 
+							i=1
+						fi
+						echo -n "$l	"
+						case "$i" in
+							1) echo "'wt_eval'" ;;
+							2) echo "'ad_eval'" ;; 
+							3) echo "'all_eval'";;
+						esac
+						i=$(($i+1))
+					done
+				fi
+			done
 		done
 	done
 	export IFS=$OLDIFS
