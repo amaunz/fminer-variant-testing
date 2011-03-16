@@ -24,6 +24,18 @@ export gp_f=$SUMMARY_FILE
 for d in "${ENDPOINT_ARR[@]}"; do 
 	echo $d
 	export gp_d=$d
+  export gp_t=""
+  case $gp_d in 
+    "salmonella_mutagenicity" )
+      export gp_t="Salmonella Mutagenicity";;
+    "rat_carcinogenicity_alt" )
+      export gp_t="Rat Carcinogenicity";;
+    "mouse_carcinogenicity_alt" )
+      export gp_t="Mouse Carcinogenicity";;
+    "multi_cell_call_alt" )
+      export gp_t="Multicell Call";;
+  esac
+
 	for m in ad_eval wt_eval all_eval; do 
 		echo -n "$m "
 		export gp_m=$m
