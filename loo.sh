@@ -53,7 +53,7 @@ fminer()
 	fi
 
 
-	if [ -z $nob ] || [ -z $a ]; then
+	if [ -z $nob ] || [ -n $a ]; then
 		local frags="$name$f$hops$a$nob$db.frag"
 		local fminer_cmd="$FMINER $f $hops $a $db $d > $DESTDIR/$frags 2>/dev/null" 
 		db=`echo $db | sed 's/\ //g'`
@@ -91,13 +91,21 @@ lu()
 	local a=$5
 	local smi=`echo "$d" | sed 's/\ .*//g'`
 
+	local nna="false"
+	local wcb="false"
+
+	# Don't annotate nodes, but wildcard all bonds
 	if [ "$a" != "" ]; then
-		a="a"
+		nna="nna"
+		awc="awc"
+
+	# Don't annotate nodes, but also do not wildcard bonds
 	else
-		a=""
+		nna="nna"
+		awc="nawc"
 	fi
 
-	local lu_cmd="$LU 1 $var $a < $DESTDIR/$frags > $DESTDIR/$frags2"
+	local lu_cmd="$LU 1 $var a w < $DESTDIR/$frags > $DESTDIR/$frags2"
 	if [ ! -f $DESTDIR/$frags2 ]; then
 		echo "$lu_cmd"
 		if ! $dry_run ; then
@@ -204,26 +212,49 @@ else
 	exit
 fi
 
-rm nohup.out
 source $FLOAT
-DESTDIR="`pwd`/`date +%y%m%d-%H%M%S`"
+DATE="`date +%y%m%d-%H%M%S`"
+LASTDIR="$HOME/last_variant_testing"
+DESTDIR="$LASTDIR/$DATE"
+OUTFILE="$LASTDIR/loo-output-$LOODATA-m25-$DATE.txt"
+PIDFILE="$LASTDIR/loo-output-$LOODATA-m25-$DATE.pid"
 
-
-# CREATE LOCAL DESTDIR
+# CREATE DESTDIR
 mkdir "$DESTDIR"
 
 if [ ! -z $linkdest ]; then
 	# find $linkdest -type f -size 0 -exec rm {} \; # remove stale files to avoid linking to empty files
+	case $linkdest in
+		/*) absolute=true ;;
+		*) absolute=false ;;
+	esac
+
+
+	if ! $absolute; then
+		echo "<dir-to-link-to> must be an absolute path."
+		exit 1
+	fi
+
 	ln -s $linkdest/* "$DESTDIR/"
 fi
 
+if [ -z "$LOODATA" ]; then
+	echo "LOODATA not set."
+	exit 1
+fi
+
+# We can start
+
+# remember my pid
+echo $$ >> "$PIDFILE"
 
 if [ "$LOODATA" = "OFS" ]; then
 	for d in "$YO" "$YO_NOB"; do
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 	wait
@@ -231,7 +262,8 @@ if [ "$LOODATA" = "OFS" ]; then
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 	wait
@@ -239,7 +271,8 @@ if [ "$LOODATA" = "OFS" ]; then
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 fi
@@ -250,33 +283,37 @@ if [ "$LOODATA" = "CPDB" ]; then
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 	for d in "$RAT" "$RAT_NOB"; do
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 	for d in "$MOC" "$MOC_NOB"; do
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 	for d in "$SALM" "$SALM_NOB"; do
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
-			nohup bash -c "fminer_loop" &
+			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
+			echo $! >> "$PIDFILE"
 		fi
 	done
 fi
 
 
 if $dry_run; then
-	rm -rf $DESTDIR
+	rm -rf "$DESTDIR"
 fi
