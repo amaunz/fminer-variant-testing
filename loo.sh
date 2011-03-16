@@ -10,18 +10,18 @@ export LDFLAGS="/usr/lib/R/lib/"
 
 NICE="nice -n 19"
 RUBY="ruby1.8"
-FMINER="$NICE /home/maunza/fminer2/fminer/fminer /home/maunza/fminer2/libbbrc/libbbrc.so"
-LAZAR="$NICE /home/maunza/lazar-core/lazar"
-L2S="$NICE $RUBY /home/maunza/lazar-core/loo2summary.rb"
-COVERAGE="$NICE $RUBY /home/maunza/xvalgenerator/coverage.rb"
-MCC="/home/maunza/cpdbdata/multi_cell_call/multi_cell_call_alt.smi /home/maunza/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
-SALM="/home/maunza/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.smi /home/maunza/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
-RAT="/home/maunza/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.smi /home/maunza/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
-MOC="/home/maunza/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.smi /home/maunza/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
-MCC_NOB="/home/maunza/cpdbdata/multi_cell_call/multi_cell_call_alt.nob.smi /home/maunza/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
-SALM_NOB="/home/maunza/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.nob.smi /home/maunza/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
-RAT_NOB="/home/maunza/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.nob.smi /home/maunza/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
-MOC_NOB="/home/maunza/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.nob.smi /home/maunza/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
+FMINER="$NICE $HOME/fminer2/fminer/fminer $HOME/fminer2/libbbrc/libbbrc.so"
+LAZAR="$NICE $HOME/lazar-core/lazar"
+L2S="$NICE $RUBY $HOME/lazar-core/loo2summary.rb"
+COVERAGE="$NICE $RUBY $HOME/xvalgenerator/coverage.rb"
+MCC="$HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.smi $HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
+SALM="$HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.smi $HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
+RAT="$HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.smi $HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
+MOC="$HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.smi $HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
+MCC_NOB="$HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.nob.smi $HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
+SALM_NOB="$HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.nob.smi $HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
+RAT_NOB="$HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.nob.smi $HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
+MOC_NOB="$HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.nob.smi $HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
 
 FLOAT="$HOME/bin/float.sh"
 
@@ -93,7 +93,7 @@ fminer_loop()
 	# loop over for different promille values
 	local p=0
 	local dataset_variant=$1
-	for p in 6 7 8 10 20 40; do
+	for p in 5 6 7 8 10 15 20 30 40 50 60 70 80 90 100; do
 		local smi=`echo "$d" | sed 's/\ .*//g'`
 		local n=`cat $smi | wc -l`
 		local f=`prom $n $p` # calculate frequency in promille
