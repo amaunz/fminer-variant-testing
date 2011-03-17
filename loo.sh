@@ -53,7 +53,7 @@ fminer()
 	fi
 
 
-	if [ -z $nob ] || [ -n $a ]; then
+	if [ -z "$nob" ] || [ -n "$a" ]; then
 		local frags="$name$f$hops$a$nob$db.frag"
 		local fminer_cmd="$FMINER $f $hops $a $db $d > $DESTDIR/$frags 2>/dev/null" 
 		db=`echo $db | sed 's/\ //g'`
@@ -97,15 +97,15 @@ lu()
 	# Don't annotate nodes, but wildcard all bonds
 	if [ "$a" != "" ]; then
 		nna="nna"
-		awc="awc"
+		wcb="wcb"
 
 	# Don't annotate nodes, but also do not wildcard bonds
 	else
 		nna="nna"
-		awc="nawc"
+		wcb="nwcb"
 	fi
 
-	local lu_cmd="$LU 1 $var a w < $DESTDIR/$frags > $DESTDIR/$frags2"
+	local lu_cmd="$LU 1 $var $nna $wcb < $DESTDIR/$frags > $DESTDIR/$frags2"
 	if [ ! -f $DESTDIR/$frags2 ]; then
 		echo "$lu_cmd"
 		if ! $dry_run ; then
@@ -166,8 +166,8 @@ fminer_loop()
 	# loop over for different promille values
 	local p=0
 	local desc_variant=$1
-	#	for p in 5 6 7 8 10 15 20 30 40 50 60 70 80 90 100; do
-	for p in 20 30 40 50 60 70 80 90 100; do
+  for p in `echo "$promille_arr"`; do
+	#for p in 6 8 10 15 20 30 40 50 60 70 80 90 100; do
 		local smi=`echo "$d" | sed 's/\ .*//g'`
 		local n=`cat $smi | wc -l`
 		local f=`prom $n $p` # calculate frequency in promille
@@ -190,8 +190,11 @@ fminer_loop()
 }
 
 
+# Globals
 linkdest=""
+promille_arr=""
 dry_run=true
+
 if [ $# -gt 0 ]; then
 	linkdest=$1
 	if [ ! -d $linkdest ]; then
@@ -202,12 +205,20 @@ if [ $# -gt 0 ]; then
 	if [ $# -ge 2 ] && [ $2 = "GO" ]; then
 		dry_run=false
 	fi
+  if [ $# -ge 2 ]; then
+    promille_arr=$3
+    if [ "$promille_arr" = "" ]; then
+      echo "Need at least one minimum frequency."
+      exit 1
+    fi
+  fi
 else
-	echo "$0 [<dir-to-link-to>] [\"GO\"]"
+	echo "$0 [<dir-to-link-to>] [\"GO\"] \"Promille-Array\""
 	echo "dir-to-link-to: Directory containing data from previous runs (pass \"\" to omit)"
-	echo "Set 'GO' to actually execute the task"
+	echo "Set "GO" to actually execute the task, else set to \"\" for dry-run"
+	echo "Set P-A to e.g. "6 8 10 15 20 30 40 50 60 70 80 90 100" to determine minfreq."
 	echo ""
-	echo "Environment variable: LOODATA must contain a dataset id" 
+	echo "Environment variable: LOODATA must contain a dareqtaset id" 
 	echo "  Currently supported: OFS, CPDB"
 	exit
 fi
@@ -254,25 +265,20 @@ if [ "$LOODATA" = "OFS" ]; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
-	wait
 	for d in "$NCTRER" "$NCTRER_NOB"; do
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
-	wait
 	for d in "$BBB" "$BBB_NOB"; do
 		if $dry_run; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
 fi
@@ -284,7 +290,6 @@ if [ "$LOODATA" = "CPDB" ]; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
 	for d in "$RAT" "$RAT_NOB"; do
@@ -292,7 +297,6 @@ if [ "$LOODATA" = "CPDB" ]; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
 	for d in "$MOC" "$MOC_NOB"; do
@@ -300,7 +304,6 @@ if [ "$LOODATA" = "CPDB" ]; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
 	for d in "$SALM" "$SALM_NOB"; do
@@ -308,7 +311,6 @@ if [ "$LOODATA" = "CPDB" ]; then
 			bash -c "fminer_loop"
 		else
 			nohup bash -c "fminer_loop" >> "$OUTFILE" 2>&1 &
-			echo $! >> "$PIDFILE"
 		fi
 	done
 fi
