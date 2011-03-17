@@ -23,7 +23,7 @@ for d in "${ENDPOINT_ARR[@]}"; do
 	OLDIFS=$IFS
 	export IFS="
 	"
-	for v in "" "-a" "-nob"; do 
+	for v in "" "-a" "-a-nob"; do 
 		for lstsm in "-msa" "-nls" "-nop"; do
 			for f in `seq 1 200`; do 
 				fn="$INPUT_DIR/$d*-f$f-m25$v$lstsm.summary"; 
@@ -35,7 +35,7 @@ for d in "${ENDPOINT_ARR[@]}"; do
 						case "$v" in
 							"") var="aromatic_variant";;
 							"-a") var="kekule_variant";;
-							"-nob") var="reduced_variant";;
+							"-a-nob") var="reduced_variant";;
 						esac
 						l=`echo "$field" | sed "s/.*accuracy.*\ /\'$d\'	\'$var\'	\'$lstsm\'	$f	/g"`
 						if [ $i -eq 4 ]; then 
