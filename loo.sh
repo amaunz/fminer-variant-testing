@@ -6,35 +6,40 @@ set -a
 export FMINER_LAZAR="1"
 export FMINER_SMARTS="1"
 
-source $HOME/.bash_ob
-source $HOME/.bash_r
-source $HOME/.bash_ruby
-source $HOME/.bash_gems
+#source $HOME/.bash_ob
+#source $HOME/.bash_r
+#source $HOME/.bash_ruby
+#source $HOME/.bash_gems
 
 NICE="nice -n 19"
-RUBY="`which ruby`"
-FMINER="$NICE $HOME/fminer2/fminer/fminer $HOME/fminer2/liblast/liblast.so"
-LAZAR="$NICE $HOME/lazar-core/lazar"
-L2S="$NICE $RUBY $HOME/lazar-core/loo2summary.rb"
-COVERAGE="$NICE $RUBY $HOME/xvalgenerator/coverage.rb"
-LU="$NICE $RUBY $HOME/last-utils/last-utils.rb"
+RUBY="/usr/bin/ruby1.8"
+FMINER="$NICE $HOME/validations/fminer2/fminer/fminer $HOME/validations/fminer2/liblast/liblast.so"
+LAZAR="$NICE $HOME/validations/lazar-core/lazar"
+L2S="$NICE $RUBY $HOME/validations/lazar-core/loo2summary.rb"
+COVERAGE="$NICE $RUBY $HOME/validations/xvalgenerator/coverage.rb"
+LU="$NICE $RUBY $HOME/validations/last-utils/last-utils.rb"
 FLOAT="$HOME/bin/float.sh"
+DATE="`date +%y%m%d-%H%M%S`"
+LASTDIR="$HOME/validations/last_variant_testing"
+DESTDIR="$LASTDIR/$DATE"
+OUTFILE="$LASTDIR/loo-output-$LOODATA-m25-$DATE.txt"
+PIDFILE="$LASTDIR/loo-output-$LOODATA-m25-$DATE.pid"
 
-MCC="$HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.smi $HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
-SALM="$HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.smi $HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
-RAT="$HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.smi $HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
-MOC="$HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.smi $HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
-MCC_NOB="$HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.nob.smi $HOME/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
-SALM_NOB="$HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.nob.smi $HOME/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
-RAT_NOB="$HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.nob.smi $HOME/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
-MOC_NOB="$HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.nob.smi $HOME/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
+MCC="$HOME/validations/cpdbdata/multi_cell_call/multi_cell_call_alt.smi $HOME/validations/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
+SALM="$HOME/validations/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.smi $HOME/validations/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
+RAT="$HOME/validations/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.smi $HOME/validations/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
+MOC="$HOME/validations/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.smi $HOME/validations/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
+MCC_NOB="$HOME/validations/cpdbdata/multi_cell_call/multi_cell_call_alt.nob.smi $HOME/validations/cpdbdata/multi_cell_call/multi_cell_call_alt.class"
+SALM_NOB="$HOME/validations/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.nob.smi $HOME/validations/cpdbdata/salmonella_mutagenicity/salmonella_mutagenicity_alt.class"
+RAT_NOB="$HOME/validations/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.nob.smi $HOME/validations/cpdbdata/rat_carcinogenicity/rat_carcinogenicity_alt.class"
+MOC_NOB="$HOME/validations/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.nob.smi $HOME/validations/cpdbdata/mouse_carcinogenicity/mouse_carcinogenicity_alt.class"
 
-YO="$HOME/ofsdata/yoshida.smi $HOME/ofsdata/yoshida.class"
-NCTRER="$HOME/ofsdata/nctrer.smi $HOME/ofsdata/nctrer.class"
-BBB="$HOME/ofsdata/bloodbarr.alt.smi $HOME/ofsdata/bloodbarr.alt.class"
-YO_NOB="$HOME/ofsdata/yoshida.nob.smi $HOME/ofsdata/yoshida.class"
-NCTRER_NOB="$HOME/ofsdata/nctrer.nob.smi $HOME/ofsdata/nctrer.class"
-BBB_NOB="$HOME/ofsdata/bloodbarr.alt.nob.smi $HOME/ofsdata/bloodbarr.alt.class"
+YO="$HOME/validations/ofsdata/yoshida.smi $HOME/validations/ofsdata/yoshida.class"
+NCTRER="$HOME/validations/ofsdata/nctrer.smi $HOME/validations/ofsdata/nctrer.class"
+BBB="$HOME/validations/ofsdata/bloodbarr.alt.smi $HOME/validations/ofsdata/bloodbarr.alt.class"
+YO_NOB="$HOME/validations/ofsdata/yoshida.nob.smi $HOME/validations/ofsdata/yoshida.class"
+NCTRER_NOB="$HOME/validations/ofsdata/nctrer.nob.smi $HOME/validations/ofsdata/nctrer.class"
+BBB_NOB="$HOME/validations/ofsdata/bloodbarr.alt.nob.smi $HOME/validations/ofsdata/bloodbarr.alt.class"
 
 
 # Call with (f,a,db,hops) 
@@ -69,13 +74,17 @@ fminer()
 			lc=`cat "$DESTDIR/$frags" | wc -l`
 		fi
 		if [ $lc -gt 0 ]; then
-			local frags2="$name$f$hops$a$nob$db-$var.frag2"
-			local frags3="$name$f$hops$a$nob$db-$var.frag3"
-			lu "$frags" "$frags2" "$frags3" "$var" "$a"
+      for wcb in "wcb" "nwcb"; do
+        for nna in "nna" "na"; do
+          local frags2="$name$f$hops$a$nob$db-$var-$wcb-$nna.frag2"
+          local frags3="$name$f$hops$a$nob$db-$var-$wcb-$nna.frag3"
+          lu "$frags" "$frags2" "$frags3" "$var" "$a" "$wcb" "$nna"
 
-			local loo="$(echo $frags3 | sed 's/\.frag3/\.loo/g')"
-			local summ="$(echo $frags3 | sed 's/\.frag3/\.summary/g')"
-			lazar $loo $frags3 $summ
+          local loo="$(echo $frags3 | sed 's/\.frag3/\.loo/g')"
+          local summ="$(echo $frags3 | sed 's/\.frag3/\.summary/g')"
+          lazar $loo $frags3 $summ
+        done
+      done
 		fi
 	fi
 
@@ -89,21 +98,9 @@ lu()
 	local frags3=$3
 	local var=$4
 	local a=$5
+  local wcb=$6
+  local nna=$7
 	local smi=`echo "$d" | sed 's/\ .*//g'`
-
-	local nna="false"
-	local wcb="false"
-
-	# Don't annotate nodes, but wildcard all bonds
-	if [ "$a" != "" ]; then
-		nna="nna"
-		wcb="wcb"
-
-	# Don't annotate nodes, but also do not wildcard bonds
-	else
-		nna="nna"
-		wcb="nwcb"
-	fi
 
 	local lu_cmd="$LU 1 $var $nna $wcb < $DESTDIR/$frags > $DESTDIR/$frags2"
 	if [ ! -f $DESTDIR/$frags2 ]; then
@@ -224,11 +221,6 @@ else
 fi
 
 source $FLOAT
-DATE="`date +%y%m%d-%H%M%S`"
-LASTDIR="$HOME/last_variant_testing"
-DESTDIR="$LASTDIR/$DATE"
-OUTFILE="$LASTDIR/loo-output-$LOODATA-m25-$DATE.txt"
-PIDFILE="$LASTDIR/loo-output-$LOODATA-m25-$DATE.pid"
 
 # CREATE DESTDIR
 mkdir "$DESTDIR"
